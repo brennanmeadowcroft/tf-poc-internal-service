@@ -11,17 +11,23 @@ workflows:
     jobs:
       - terraform/fmt:
           checkout: true
-          context: terraform
+          context:
+            - terraform
+            - infra-aws-development
           path: "./terraform"
       - terraform/validate:
           checkout: true
-          context: terraform
+          context: 
+            - terraform
+            - infra-aws-development
           path: "./terraform"
           requires:
             - terraform/fmt
       - terraform/plan:
           checkout: true
-          context: terraform
+          context: 
+            - terraform
+            - infra-aws-development
           persist-workspace: true
           path: "./terraform"
           requires:
