@@ -1,0 +1,25 @@
+# This config uses the `.circleci/extended/orb-test.yml` as its base, and then publishes the app to S3.
+# The workflow contained here demonstrates a practical application of `post-steps`
+# and using workspace persistence
+version: 2.1
+
+orbs:
+  terraform: circleci/terraform@2.0.2
+  
+workflows:
+  deploy_infrastructure:
+    jobs:
+      - terraform/fmt:
+          checkout: true
+          context: terraform
+      - terraform/validate:
+          checkout: true
+          context: terraform
+          requires:
+            - terraform/fmt
+      - terraform/plan:
+          checkout: true
+          context: terraform
+          persist-workspace: true
+          requires:
+            - terraform/validate
