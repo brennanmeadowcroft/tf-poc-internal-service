@@ -13,7 +13,7 @@ jobs:
     steps:
       - run:
           name: Analyze Terraform Config
-          command: docker run --rm -it -v "$(pwd):/src" /src
+          command: docker run --rm -it -v "$(pwd):/src" tfsec/tfsec /src
   
 
 workflows:
