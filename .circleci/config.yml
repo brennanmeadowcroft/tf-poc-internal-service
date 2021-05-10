@@ -49,8 +49,8 @@ workflows:
             - terraform/validate
             - terraform_static_analysis
       - terraform/apply:
-          backend_config_file: "plan.out"
-          checkout: true
+          attach-workspace: true
+          backend_config_file: "./plan.out"
           context:
             - terraform
             - infra-aws-development
