@@ -7,7 +7,15 @@ orbs:
   terraform: circleci/terraform@2.0.2
 
 jobs:
-  validate_terraform:
+  terraform_static_analysis:
+    machine:
+      image: ubuntu-2004:202104-01
+    steps:
+      - run:
+          name: Analyze Terraform Config
+          command: docker run --rm -it -v "$(pwd):/src" /src
+  
+
 workflows:
   deploy_infrastructure:
     jobs:
@@ -25,15 +33,11 @@ workflows:
           path: "./terraform"
           requires:
             - terraform/fmt
-      - validate_terraform:
-          checkout: true
+      - terraform_static_analysis:
           context:
-            - infra-aws-development
-          docker:
-            - image: tfsec/tfsec
-              command: ["--rm -it -v \"$(pwd):/src\"", "/src"] 
+            - infra-aws-development 
           requires:
-            - terraform/validate
+            - terraform/fmt
       - terraform/plan:
           checkout: true
           context: 
