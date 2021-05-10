@@ -16,7 +16,6 @@ jobs:
           name: Analyze Terraform Config
           command: docker run --rm -it -v "$(pwd):/src" tfsec/tfsec /src
   
-
 workflows:
   deploy_infrastructure:
     jobs:
@@ -48,3 +47,13 @@ workflows:
           path: "./terraform"
           requires:
             - terraform/validate
+            - terraform_static_analysis
+      - terraform/apply:
+          backend_config_file: "plan.out"
+          checkout: true
+          context:
+            - terraform
+            - infra-aws-development
+          path: "./terraform"
+          requires:
+            - terraform/plan
