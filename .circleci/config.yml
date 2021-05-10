@@ -50,10 +50,9 @@ workflows:
             - terraform_static_analysis
       - terraform/apply:
           attach-workspace: true
-          backend_config_file: "./plan.out"
           context:
             - terraform
             - infra-aws-development
-          path: "./terraform"
+          path: "./plan.out"
           requires:
             - terraform/plan
